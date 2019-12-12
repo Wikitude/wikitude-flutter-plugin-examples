@@ -1,0 +1,13 @@
+.info {
+    font-size: large;
+    position: absolute;
+    width: 100%;
+    padding-top: calc(12px + env(safe-area-inset-top));
+    padding-bottom: 12px;
+    background-color: #BBBBBB;
+    text-align: center;
+    top: 0;
+    left: 0;
+    opacity: 0.7;
+    display: table;
+}
