@@ -4,7 +4,7 @@ import io.flutter.plugin.common.PluginRegistry;
 import com.wikitude.wikitude_plugin.WikitudePlugin;
 import com.lyokone.location.LocationPlugin;
 import io.flutter.plugins.pathprovider.PathProviderPlugin;
-import wakelock.wakelock.WakelockPlugin;
+import creativecreatorormaybenot.wakelock.WakelockPlugin;
 
 /**
  * Generated file. Do not edit.
@@ -17,7 +17,7 @@ public final class GeneratedPluginRegistrant {
     WikitudePlugin.registerWith(registry.registrarFor("com.wikitude.wikitude_plugin.WikitudePlugin"));
     LocationPlugin.registerWith(registry.registrarFor("com.lyokone.location.LocationPlugin"));
     PathProviderPlugin.registerWith(registry.registrarFor("io.flutter.plugins.pathprovider.PathProviderPlugin"));
-    WakelockPlugin.registerWith(registry.registrarFor("wakelock.wakelock.WakelockPlugin"));
+    WakelockPlugin.registerWith(registry.registrarFor("creativecreatorormaybenot.wakelock.WakelockPlugin"));
   }
 
   private static boolean alreadyRegisteredWith(PluginRegistry registry) {

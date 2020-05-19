@@ -65,5 +65,4 @@ post_install do |installer|
       config.build_settings['ENABLE_BITCODE'] = 'NO'
     end
   end
-  system('bash Scripts/configure_wikitude_sdk_framework.sh')
 end

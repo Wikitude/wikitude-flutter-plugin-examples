@@ -36,7 +36,8 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="Flutter Examples"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round">
         <activity
             android:name="com.wikitude.fluttersamples.MainActivity"
             android:launchMode="singleTop"

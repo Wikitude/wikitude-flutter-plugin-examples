@@ -6,7 +6,7 @@ import 'package:wikitude_flutter_app/customUrl.dart';
 
 import 'arview.dart';
 import 'category.dart';
-import 'custom_expansion_tile.dart' as custom;
+import 'custom_expansion_tile.dart';
 import 'sample.dart';
 
 import 'package:augmented_reality_plugin_wikitude/wikitude_plugin.dart';
@@ -151,26 +151,23 @@ class CategoryExpansionTile extends StatefulWidget {
 
 class CategoryExpansionTileState extends State<CategoryExpansionTile> {
 
-  List<bool> isExpandedList = new List();
-
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: widget.categories.length,
       itemBuilder: (context, index){
-        isExpandedList.add(false);
-        return custom.ExpansionTile(
+        return CustomExpansionTile(
           key: PageStorageKey("$index"),
           title: Text(
             "${widget.categories[index].categoryName}",
             style: TextStyle(color: Colors.black),
           ),
-          headerBackgroundColor: isExpandedList[index] ? Color(0xffffb300) : Colors.white,
+          headerBackgroundColor: Colors.white,
+          headerBackgroundColorAccent: Color(0xffffb300),
+          headerContentPadding: EdgeInsets.fromLTRB(15, 2, 15, 2),
+          borderColor: Theme.of(context).dividerColor,
           iconColor: Colors.grey,
           children: createSamplesTileList(widget.categories[index].samples),
-          onExpansionChanged: (bool expanding) => setState(() {
-            this.isExpandedList[index] = expanding;
-          })
         );
       }
     );

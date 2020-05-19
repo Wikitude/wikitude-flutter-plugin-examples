@@ -18,17 +18,13 @@ Sample projects for Android and iOS demoing the most common use-cases.
 
 * Open the `ios/Runner.xcodeproj` project with Xcode. Select the `Runner` target, open the `Signing & Capabilities` tab and input your signing settings.
 
-* Navigate into the root project of the example app in your terminal, and input the following command to generate and configure the `ios/Runner.xcworkspace`:
+* Navigate into the root project of the example app in your terminal, and input the following command:
 
     ```
-    $ flutter build ios
+    $ flutter run
     ```
 
-* Input the following command to run the example on your device:
-
-	```
-	$ flutter run
-	```
+    This will generate and configure the `ios/Runner.xcworkspace` and run the app on your device.
 
 ### Known issues
 

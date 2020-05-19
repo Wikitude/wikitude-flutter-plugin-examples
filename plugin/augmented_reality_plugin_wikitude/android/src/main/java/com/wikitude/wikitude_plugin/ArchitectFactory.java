@@ -29,15 +29,23 @@ public class ArchitectFactory extends PlatformViewFactory {
     }
 
     void captureScreen() {
-        architectWidget.captureScreen();
+        if (architectWidget != null) {
+            architectWidget.captureScreen();
+        }
     }
 
     void captureScreenError(String error) {
-        architectWidget.captureScreenError(error);
+        if (architectWidget != null) {
+            architectWidget.captureScreenError(error);
+        }
     }
 
     int getExternalStoragePermissionRequestCode() {
-        return architectWidget.getExternalStoragePermissionRequestCode();
+        if (architectWidget != null) {
+            return architectWidget.getExternalStoragePermissionRequestCode();
+        } else {
+            return 0;
+        }
     }
 
 }

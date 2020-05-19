@@ -71,6 +71,11 @@ public class ArchitectWidget implements PlatformView, MethodCallHandler, Archite
 
     private static final int EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 1;
 
+    enum State {
+        CREATE, POST_CREATE, RESUME, PAUSE, DESTROY
+    }
+    State state;
+
     @SuppressLint("SetJavaScriptEnabled")
     ArchitectWidget(Context context, Registrar registrar, int id, Object o) {
         this.context = context;
@@ -138,6 +143,7 @@ public class ArchitectWidget implements PlatformView, MethodCallHandler, Archite
 
             architectView = new ArchitectView(context);
             architectView.onCreate(config); // create ArchitectView with configuration
+            state = State.CREATE;
         } catch (Throwable t) {
             Log.e("JSON", "Malformed JSON");
         }
@@ -160,14 +166,20 @@ public class ArchitectWidget implements PlatformView, MethodCallHandler, Archite
     public void onMethodCall(MethodCall call, Result result) {
         switch (call.method) {
             case "load":
-                architectView.onPostCreate();
+                if (state == State.CREATE) {
+                    architectView.onPostCreate();
+                    state = State.POST_CREATE;
+                }
                 String url = call.arguments.toString();
-                if(!url.contains("https://") && !url.contains("http://")) {
+                if(!url.contains("https://") && !url.contains("http://") && !url.startsWith("file://")
+                        && !url.startsWith(context.getFilesDir().getAbsolutePath())) {
                     url = registrar.lookupKeyForAsset(url);
+                } else if (url.startsWith(context.getFilesDir().getAbsolutePath())) {
+                    url = "file://" + url;
                 }
 
                 architectView.registerWorldLoadedListener(this);
-                
+
                 try {
                     architectView.load(url);
                 } catch (IOException e) {
@@ -176,6 +188,7 @@ public class ArchitectWidget implements PlatformView, MethodCallHandler, Archite
                 break;
             case "onResume":
                 architectView.onResume();
+                state = State.RESUME;
 
                 if(features.contains(Feature.GEO)) {
                     if(this.locationProvider == null) {
@@ -185,12 +198,14 @@ public class ArchitectWidget implements PlatformView, MethodCallHandler, Archite
                 }
                 break;
             case "onPause":
+                state = State.PAUSE;
                 if(locationProvider != null) {
                     locationProvider.onPause();
                 }
                 architectView.onPause();
                 break;
             case "onDestroy":
+                state = State.DESTROY;
                 architectView.clearCache();
                 architectView.onDestroy();
                 break;

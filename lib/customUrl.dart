@@ -9,7 +9,14 @@ import 'package:augmented_reality_plugin_wikitude/wikitude_plugin.dart';
 import 'package:augmented_reality_plugin_wikitude/wikitude_response.dart';
 import 'package:augmented_reality_plugin_wikitude/startupConfiguration.dart';
 
-class CustomUrl extends StatelessWidget {
+class CustomUrl extends StatefulWidget {
+  @override
+  _CustomUrlState createState() => _CustomUrlState();
+}
+
+class _CustomUrlState extends State<CustomUrl> {
+
+  final customWorldUrlText = TextEditingController();
 
   AppBar get appBar {
     if (!Platform.isIOS) {
@@ -24,8 +31,6 @@ class CustomUrl extends StatelessWidget {
   Widget build(BuildContext context) {
     double statusBarHeight = MediaQuery.of(context).padding.top;
     if (Platform.isIOS) statusBarHeight = 0;
-
-    final customWorldUrlText = TextEditingController();
 
     return Scaffold(
       appBar: this.appBar,

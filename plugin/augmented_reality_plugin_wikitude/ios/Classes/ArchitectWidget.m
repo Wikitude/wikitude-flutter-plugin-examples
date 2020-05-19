@@ -241,19 +241,45 @@ NSString * const kWTArchitectWidget_ArgumentFeatures                 = @"feature
 #pragma mark - ArchitectView handling
 - (void)loadArchitectWorld:(NSString*)urlString
 {
+    /* Escape special characters in the URL */
+    urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
     NSURL *architectWorldURL = [NSURL URLWithString:urlString];
 
-    /* If the URL has no scheme, look for the AR world in the bundle resources */
+    /* If the URL has no scheme, look for the AR world in the local resources */
     if ( ![architectWorldURL scheme] )
     {
         NSString *worldName = [urlString lastPathComponent];
-        worldName = [worldName stringByDeletingPathExtension];
-        NSString *worldNameExtension = [urlString pathExtension];
+        NSString *architectWorldDirectoryPath;
 
-        NSString *assetKey = [_registrar lookupKeyForAsset:urlString];
-        NSString *architectWorldDirectoryPath = [assetKey stringByDeletingLastPathComponent];
+        /* If the URL comes from internal storage, search for the AR world in the Application Support directory */
+        if ( [urlString containsString:NSHomeDirectory()])
+        {
+            NSURL *applicationSupportURL = [[[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask] firstObject];
+            NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager]
+                                                 enumeratorAtURL:applicationSupportURL
+                                                 includingPropertiesForKeys:nil
+                                                 options:(NSDirectoryEnumerationSkipsPackageDescendants |
+                                                          NSDirectoryEnumerationSkipsHiddenFiles)
+                                                 errorHandler:nil];
 
-        architectWorldURL = [[NSBundle mainBundle] URLForResource:worldName withExtension:worldNameExtension subdirectory:architectWorldDirectoryPath];
+            for (NSURL *url in enumerator) {
+                if ([[url absoluteString] containsString:worldName]) {
+                    architectWorldURL = url;
+                    break;
+                }
+            }
+        }
+        /* Otherwise, search for the AR world in the bundle resources */
+        else
+        {
+            worldName = [worldName stringByDeletingPathExtension];
+            NSString *worldNameExtension = [urlString pathExtension];
+
+            NSString *assetKey = [_registrar lookupKeyForAsset:urlString];
+            architectWorldDirectoryPath = [assetKey stringByDeletingLastPathComponent];
+
+            architectWorldURL = [[NSBundle mainBundle] URLForResource:worldName withExtension:worldNameExtension subdirectory:architectWorldDirectoryPath];
+        }
     }
 
     self.loadingArchitectWorldNavigation = [_architectView loadArchitectWorldFromURL:architectWorldURL];
