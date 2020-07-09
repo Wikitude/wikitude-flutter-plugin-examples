@@ -52,6 +52,8 @@ import static io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 
 public class ArchitectWidget implements PlatformView, MethodCallHandler, ArchitectView.ArchitectWorldLoadedListener, ArchitectJavaScriptInterfaceListener, LocationListener {
 
+    private static final String TAG = ArchitectWidget.class.getSimpleName();
+
     private Context context;
     private Registrar registrar;
     private ArchitectView architectView;
@@ -72,7 +74,7 @@ public class ArchitectWidget implements PlatformView, MethodCallHandler, Archite
     private static final int EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 1;
 
     enum State {
-        CREATE, POST_CREATE, RESUME, PAUSE, DESTROY
+        CREATED, POST_CREATED, RESUMED, PAUSED, DESTROYED
     }
     State state;
 
@@ -143,9 +145,9 @@ public class ArchitectWidget implements PlatformView, MethodCallHandler, Archite
 
             architectView = new ArchitectView(context);
             architectView.onCreate(config); // create ArchitectView with configuration
-            state = State.CREATE;
+            state = State.CREATED;
         } catch (Throwable t) {
-            Log.e("JSON", "Malformed JSON");
+            Log.e(TAG, "Malformed JSON");
         }
 
         channel = new MethodChannel(registrar.messenger(), "architectwidget_" + id);
@@ -166,9 +168,9 @@ public class ArchitectWidget implements PlatformView, MethodCallHandler, Archite
     public void onMethodCall(MethodCall call, Result result) {
         switch (call.method) {
             case "load":
-                if (state == State.CREATE) {
+                if (state == State.CREATED) {
                     architectView.onPostCreate();
-                    state = State.POST_CREATE;
+                    state = State.POST_CREATED;
                 }
                 String url = call.arguments.toString();
                 if(!url.contains("https://") && !url.contains("http://") && !url.startsWith("file://")
@@ -183,31 +185,43 @@ public class ArchitectWidget implements PlatformView, MethodCallHandler, Archite
                 try {
                     architectView.load(url);
                 } catch (IOException e) {
-                    Log.e("ERROR", "Load failed");
+                    Log.e(TAG, "Load failed");
                 }
                 break;
             case "onResume":
-                architectView.onResume();
-                state = State.RESUME;
+                if (state == State.POST_CREATED || state == State.PAUSED) {
+                    architectView.onResume();
+                    state = State.RESUMED;
 
-                if(features.contains(Feature.GEO)) {
-                    if(this.locationProvider == null) {
-                        this.locationProvider = new LocationProvider(context, this);
+                    if(features.contains(Feature.GEO)) {
+                        if(this.locationProvider == null) {
+                            this.locationProvider = new LocationProvider(context, this);
+                        }
+                        this.locationProvider.onResume();
                     }
-                    this.locationProvider.onResume();
+                } else {
+                    Log.e(TAG, "Resume failed. Please, make sure everything is initialized properly.");
                 }
                 break;
             case "onPause":
-                state = State.PAUSE;
-                if(locationProvider != null) {
-                    locationProvider.onPause();
+                if (state == State.RESUMED) {
+                    if(locationProvider != null) {
+                        locationProvider.onPause();
+                    }
+                    architectView.onPause();
+                    state = State.PAUSED;
+                } else {
+                    Log.e(TAG, "Resume needs to be called before pause is called in the appropriate lifecycle method.");
                 }
-                architectView.onPause();
                 break;
             case "onDestroy":
-                state = State.DESTROY;
-                architectView.clearCache();
-                architectView.onDestroy();
+                if (state == State.PAUSED) {
+                    architectView.clearCache();
+                    architectView.onDestroy();
+                    state = State.DESTROYED;
+                } else {
+                    Log.e(TAG, "Pause needs to be called before destroy is called in the appropriate lifecycle method.");
+                }
                 break;
             case "setLocation":
                 useCustomLocation = true;
@@ -224,7 +238,7 @@ public class ArchitectWidget implements PlatformView, MethodCallHandler, Archite
                         architectView.setLocation(lat, lon, alt, (float)accuracy);
                     }
                 } catch (Throwable t) {
-                    Log.e("JSON", "Malformed JSON");
+                    Log.e(TAG, "Malformed JSON");
                 }
                 break;
             case "callJavascript":
@@ -242,7 +256,7 @@ public class ArchitectWidget implements PlatformView, MethodCallHandler, Archite
                     String name = jsonObject.getString("name");
                     permissionRequest(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE, mode, name);
                 } catch (Throwable t) {
-                    Log.e("JSON", "Malformed JSON");
+                    Log.e(TAG, "Malformed JSON");
                 }
                 break;
             default:

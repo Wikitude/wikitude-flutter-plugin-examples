@@ -116,8 +116,9 @@ class MyAppState extends State<MainMenu> {
   Future<void> _getSDKInfo() async {
     String sdkVersion = await WikitudePlugin.getSDKVersion();
     WikitudeSDKBuildInformation sdkBuildInformation = await WikitudePlugin.getSDKBuildInformation();
+    String flutterVersion = "1.17.1";
 
-    String message = "Build configuration: ${sdkBuildInformation.buildConfiguration}\nBuild date: ${sdkBuildInformation.buildDate}\nBuild number: ${sdkBuildInformation.buildNumber}\nBuild version: $sdkVersion";
+    String message = "Build configuration: ${sdkBuildInformation.buildConfiguration}\nBuild date: ${sdkBuildInformation.buildDate}\nBuild number: ${sdkBuildInformation.buildNumber}\nBuild version: $sdkVersion\nFlutter version: $flutterVersion";
     showDialog(
       context: context,
       builder: (BuildContext context) {
