@@ -28,19 +28,21 @@ Sample projects for Android and iOS demoing the most common use-cases.
 
 ### Known issues
 
-* It is a known issue that when trying to generate a release Android apk in Flutter, the following error can happen:
+* It is a known issue (https://github.com/flutter/flutter/issues/32756) that when trying to generate a release Android apk in Flutter, the following error can happen:
 
     ```
     AndroidRuntime: java.lang.UnsatisfiedLinkError: dalvik.system.PathClassLoader[DexPathList[[zip file "/data/app/com.wikitude.fluttersamples/base.apk"],nativeLibraryDirectories=[/data/app/com.wikitude.fluttersamples/lib/arm, /data/app/com.wikitude.fluttersamples/base.apk!/lib/armeabi-v7a, /vendor/lib, /system/lib]]] couldn't find "libflutter.so"
     ```
 
-    Because of that, if you build the application in release mode, you will have to put the following code inside `wikitude\_flutter_app/android/app/build.gradle` at the end of the `defaultConfig` section:
+    It means that the flutter library for the armeabi-v7a architecture is missing. Because of that, if you build the application in release mode, you will have to put the following code inside `wikitude\_flutter_app/android/app/build.gradle` at the end of the `defaultConfig` section to make sure that the app won't crash in any device:
 
     ```
     ndk {
         abiFilters 'armeabi-v7a'
     }
     ```
+
+    Nevertheless, if you are developing for Android with Visual Studio Code the abiFilter has to be removed.
 
 * Windows can't handle long paths. In case you open the project in Windows and you get the following error:
 

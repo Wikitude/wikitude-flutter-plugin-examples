@@ -15,6 +15,6 @@ The Wikitude plugin to create augmented reality experiences in your apps.
 
   s.vendored_frameworks = 'Frameworks/WikitudeSDK.framework'
 
-  s.ios.deployment_target = '11.0'
+  s.ios.deployment_target = '12.0'
 end
 

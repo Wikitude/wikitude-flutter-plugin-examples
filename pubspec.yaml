@@ -1,7 +1,7 @@
 name: wikitude_flutter_app
 description: A new Flutter project.
 
-version: 9.2.0+1
+version: 9.3.0+1
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -237,20 +237,14 @@ flutter:
     - samples/04_CloudRecognition_3_UsingMetainformationInTheResponse/js/
     - samples/04_CloudRecognition_3_UsingMetainformationInTheResponse/css/
     - samples/04_CloudRecognition_3_UsingMetainformationInTheResponse/assets/
-    - samples/04_CloudRecognition_3_UsingMetainformationInTheResponse/jquery/
-    - samples/04_CloudRecognition_3_UsingMetainformationInTheResponse/jquery/images/
     - samples/04_CloudRecognition_2_ContinuousImageRecognition/
     - samples/04_CloudRecognition_2_ContinuousImageRecognition/js/
     - samples/04_CloudRecognition_2_ContinuousImageRecognition/css/
     - samples/04_CloudRecognition_2_ContinuousImageRecognition/assets/
-    - samples/04_CloudRecognition_2_ContinuousImageRecognition/jquery/
-    - samples/04_CloudRecognition_2_ContinuousImageRecognition/jquery/images/
     - samples/04_CloudRecognition_1_SingleImageRecognition/
     - samples/04_CloudRecognition_1_SingleImageRecognition/js/
     - samples/04_CloudRecognition_1_SingleImageRecognition/css/
     - samples/04_CloudRecognition_1_SingleImageRecognition/assets/
-    - samples/04_CloudRecognition_1_SingleImageRecognition/jquery/
-    - samples/04_CloudRecognition_1_SingleImageRecognition/jquery/images/
     - samples/03_MultipleTargets_3_TransformationBetweenTargets/
     - samples/03_MultipleTargets_3_TransformationBetweenTargets/js/
     - samples/03_MultipleTargets_3_TransformationBetweenTargets/css/
