@@ -42,7 +42,7 @@ packages:
       path: "plugin/augmented_reality_plugin_wikitude"
       relative: true
     source: path
-    version: "9.3.0"
+    version: "9.3.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -360,7 +360,7 @@ packages:
       name: path_provider_macos
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.4+3"
+    version: "0.0.4+4"
   path_provider_platform_interface:
     dependency: transitive
     description:

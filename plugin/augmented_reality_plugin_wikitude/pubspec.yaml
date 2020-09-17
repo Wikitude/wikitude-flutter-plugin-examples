@@ -1,6 +1,6 @@
 name: augmented_reality_plugin_wikitude
 description: The Wikitude plugin to create augmented reality experiences in your apps.
-version: 9.3.0
+version: 9.3.1
 author: Wikitude GmbH <flutter@wikitude.com>
 homepage: https://www.wikitude.com/
 documentation: https://www.wikitude.com/external/doc/documentation/latest/flutter/
