@@ -3,14 +3,19 @@ package com.wikitude.wikitude_plugin;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
@@ -253,6 +258,21 @@ public class ArchitectWidget implements PlatformView, MethodCallHandler, Archite
                     Log.e(TAG, "Malformed JSON");
                 }
                 break;
+            case "showAlert":
+                String alertDialogItems = gson.toJson(call.arguments);
+                try {
+                    JSONObject jsonObject = new JSONObject(alertDialogItems);
+                    String title = jsonObject.getString("title");
+                    String message = jsonObject.getString("message");
+                    boolean requestOpenSettings = jsonObject.getBoolean("requestOpenSettings");
+                    showAlert(title, message, requestOpenSettings);
+                } catch (Throwable t) {
+                    Log.e(TAG, "Malformed JSON");
+                }
+                break;
+            case "canWebViewGoBack":
+                result.success(architectView.webViewGoBack());
+                break;
             default:
                 result.notImplemented();
         }
@@ -376,4 +396,26 @@ public class ArchitectWidget implements PlatformView, MethodCallHandler, Archite
         channel.invokeMethod("onWorldLoadFailed", s);
     }
     // end ArchitectWorldLoadedListener
+
+    private void showAlert(String title, String message, boolean requestOpenSettings) {
+        AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this.context);
+        dlgAlert.setTitle(title);
+        dlgAlert.setMessage(message);
+        if (requestOpenSettings) {
+            dlgAlert.setPositiveButton("Open Settings", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    Uri uri = Uri.fromParts("package", context.getPackageName(), null);
+                    intent.setData(uri);
+                    context.startActivity(intent);
+                }
+            });
+            dlgAlert.setNegativeButton("Cancel", null);
+        } else {
+            dlgAlert.setPositiveButton("OK", null);
+        }
+        dlgAlert.create().show();
+    }
 }

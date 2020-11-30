@@ -19,7 +19,8 @@ typedef NS_ENUM(NSUInteger, WTFlutterMethodCall) {
     WTFlutterMethodCall_SetLocation,
     WTFlutterMethodCall_CallJavaScript,
     WTFlutterMethodCall_AddArchitectJavaScriptInterfaceListener,
-    WTFlutterMethodCall_CaptureScreen
+    WTFlutterMethodCall_CaptureScreen,
+    WTFlutterMethodCall_ShowAlert
 };
 
 NSString * const kWTArchitectWidget_ArgumentLicenseKey               = @"license_key";
@@ -50,7 +51,7 @@ NSString * const kWTArchitectWidget_ArgumentFeatures                 = @"feature
     {
         _viewId = viewId;
         _flutterMethodCallsArray = @[@"load",@"onPause", @"onResume", @"onDestroy", @"setLocation", @"callJavascript",
-                                     @"addArchitectJavaScriptInterfaceListener", @"captureScreen"];
+                                     @"addArchitectJavaScriptInterfaceListener", @"captureScreen", @"showAlert"];
 
         if ( args && [args isKindOfClass:[NSDictionary class]] )
         {
@@ -135,6 +136,9 @@ NSString * const kWTArchitectWidget_ArgumentFeatures                 = @"feature
             break;
         case WTFlutterMethodCall_CaptureScreen:
             [self captureScreen:call result:result];
+            break;
+        case WTFlutterMethodCall_ShowAlert:
+            [self showAlert:call result:result];
             break;
 
         default:
@@ -236,6 +240,53 @@ NSString * const kWTArchitectWidget_ArgumentFeatures                 = @"feature
     WTScreenshotSaveOptions saveOptions = WTScreenshotSaveOption_CallDelegateOnSuccess;
 
     [self.architectView captureScreenWithMode:captureMode usingSaveMode:saveMode saveOptions:saveOptions context:context];
+}
+
+- (void)showAlert:(FlutterMethodCall*)call result:(FlutterResult)result
+{
+    NSString *title = @"";
+    NSString *message = @"";
+    if ( [call.arguments[@"title"] isKindOfClass:[NSString class]] )
+    {
+        title = call.arguments[@"title"];
+    }
+    if ( [call.arguments[@"message"] isKindOfClass:[NSString class]] )
+    {
+        message = call.arguments[@"message"];
+    }
+
+    if ( title.length != 0 && message.length != 0 )
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title
+                                                                        message:message
+                                                                 preferredStyle:UIAlertControllerStyleAlert];
+
+        if ( ![call.arguments[@"requestOpenSettings"] boolValue] )
+        {
+            UIAlertAction* okButton = [UIAlertAction actionWithTitle:@"OK"
+                                                               style:UIAlertActionStyleDefault
+                                                             handler:nil];
+            [alertController addAction:okButton];
+        }
+        else
+        {
+            UIAlertAction* openSettingsButton = [UIAlertAction actionWithTitle:@"Open Settings"
+                                                               style:UIAlertActionStyleDefault
+                                                             handler:nil];
+            UIAlertAction* cancelButton = [UIAlertAction actionWithTitle:@"Cancel"
+                                                               style:UIAlertActionStyleCancel
+                                                             handler:nil];
+            [alertController addAction:openSettingsButton];
+            [alertController addAction:cancelButton];
+        }
+
+        UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+        [rootViewController presentViewController:alertController animated:YES completion:nil];
+    }
+    else
+    {
+        NSLog(@"Invalid Flutter input for method %@", call.method);
+    }
 }
 
 #pragma mark - ArchitectView handling

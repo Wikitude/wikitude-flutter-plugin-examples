@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
 import 'applicationModelPois.dart';
@@ -80,9 +81,18 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(sample.name)),
-      body: Container(
+      body: WillPopScope(
+        onWillPop: () async {
+          if(defaultTargetPlatform == TargetPlatform.android) {
+            return !(await this.architectWidget.canWebViewGoBack());
+          } else {
+            return true;
+          }
+        },
+        child: Container(
           decoration: BoxDecoration(color: Colors.black),
           child: architectWidget),
+        )
     );
   }
 
@@ -145,62 +155,15 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   Future<void> captureScreen() async {
     WikitudeResponse captureScreenResponse = await this.architectWidget.captureScreen(true, "");
     if(captureScreenResponse.success) {
-      showSingleButtonDialog("Success", "Image saved in: " + captureScreenResponse.message, "OK");
+      this.architectWidget.showAlert("Success", "Image saved in: " + captureScreenResponse.message);
     } else {
       if(captureScreenResponse.message.contains("permission")) {
-        showDialogOpenAppSettings("Error", captureScreenResponse.message);
+        this.architectWidget.showAlert("Error", captureScreenResponse.message, true);
       }
       else {
-        showSingleButtonDialog("Error", captureScreenResponse.message, "Ok");
+        this.architectWidget.showAlert("Error", captureScreenResponse.message);
       }
     }
-  }
-
-  void showSingleButtonDialog(String title, String content, final String buttonText) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(content),
-          actions: <Widget>[
-            FlatButton(
-              child: Text(buttonText),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      }
-    );
-  }
-
-  void showDialogOpenAppSettings(String title, String content) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(content),
-          actions: <Widget>[
-            FlatButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-            child: const Text('Open settings'),
-            onPressed: () {
-              Navigator.of(context).pop();
-              WikitudePlugin.openAppSettings();
-            },
-          )
-          ],
-        );
-      }
-    );
   }
 
   Future<void> onLoadSuccess() async {
@@ -208,7 +171,7 @@ class ArViewState extends State<ArViewWidget> with WidgetsBindingObserver {
   }
 
   Future<void> onLoadFailed(String error) async {
-    showSingleButtonDialog("Failed to load Architect World", error, "Ok");
+    this.architectWidget.showAlert("Failed to load Architect World", error);
   }
 }
 

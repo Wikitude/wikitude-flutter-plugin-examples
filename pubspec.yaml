@@ -1,7 +1,7 @@
 name: wikitude_flutter_app
 description: A new Flutter project.
 
-version: 9.4.0+1
+version: 9.5.0+1
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -47,19 +47,14 @@ flutter:
     - samples/12_HardwareControl_3_AdvancedFeatures/js/
     - samples/12_HardwareControl_3_AdvancedFeatures/css/
     - samples/12_HardwareControl_3_AdvancedFeatures/assets/
-    - samples/12_HardwareControl_3_AdvancedFeatures/jquery/
-    - samples/12_HardwareControl_3_AdvancedFeatures/jquery/images/
     - samples/12_HardwareControl_2_CameraSwitching/
     - samples/12_HardwareControl_2_CameraSwitching/js/
     - samples/12_HardwareControl_2_CameraSwitching/css/
     - samples/12_HardwareControl_2_CameraSwitching/assets/
-    - samples/12_HardwareControl_2_CameraSwitching/jquery/
-    - samples/12_HardwareControl_2_CameraSwitching/jquery/images/
     - samples/12_HardwareControl_1_FrontCamera/
     - samples/12_HardwareControl_1_FrontCamera/js/
+    - samples/12_HardwareControl_1_FrontCamera/css/
     - samples/12_HardwareControl_1_FrontCamera/assets/
-    - samples/12_HardwareControl_1_FrontCamera/jquery/
-    - samples/12_HardwareControl_1_FrontCamera/jquery/images/
     - samples/11_Video_4_Bonus-TransparentVideo/
     - samples/11_Video_4_Bonus-TransparentVideo/js/
     - samples/11_Video_4_Bonus-TransparentVideo/css/
@@ -80,72 +75,54 @@ flutter:
     - samples/10_BrowsingPois_6_Bonus-CaptureScreen/js/
     - samples/10_BrowsingPois_6_Bonus-CaptureScreen/css/
     - samples/10_BrowsingPois_6_Bonus-CaptureScreen/assets/
-    - samples/10_BrowsingPois_6_Bonus-CaptureScreen/jquery/
-    - samples/10_BrowsingPois_6_Bonus-CaptureScreen/jquery/images/
     - samples/10_BrowsingPois_5_NativeDetailScreen/
     - samples/10_BrowsingPois_5_NativeDetailScreen/js/
     - samples/10_BrowsingPois_5_NativeDetailScreen/css/
     - samples/10_BrowsingPois_5_NativeDetailScreen/assets/
-    - samples/10_BrowsingPois_5_NativeDetailScreen/jquery/
-    - samples/10_BrowsingPois_5_NativeDetailScreen/jquery/images/
     - samples/10_BrowsingPois_4_ReloadingContent/
     - samples/10_BrowsingPois_4_ReloadingContent/js/
     - samples/10_BrowsingPois_4_ReloadingContent/css/
     - samples/10_BrowsingPois_4_ReloadingContent/assets/
-    - samples/10_BrowsingPois_4_ReloadingContent/jquery/
-    - samples/10_BrowsingPois_4_ReloadingContent/jquery/images/
     - samples/10_BrowsingPois_3_LimitingRange/
     - samples/10_BrowsingPois_3_LimitingRange/js/
     - samples/10_BrowsingPois_3_LimitingRange/css/
     - samples/10_BrowsingPois_3_LimitingRange/assets/
-    - samples/10_BrowsingPois_3_LimitingRange/jquery/
-    - samples/10_BrowsingPois_3_LimitingRange/jquery/images/
     - samples/10_BrowsingPois_2_AddingRadar/
     - samples/10_BrowsingPois_2_AddingRadar/js/
     - samples/10_BrowsingPois_2_AddingRadar/css/
     - samples/10_BrowsingPois_2_AddingRadar/assets/
-    - samples/10_BrowsingPois_2_AddingRadar/jquery/
-    - samples/10_BrowsingPois_2_AddingRadar/jquery/images/
     - samples/10_BrowsingPois_1_PresentingDetails/
     - samples/10_BrowsingPois_1_PresentingDetails/js/
+    - samples/10_BrowsingPois_1_PresentingDetails/css/
     - samples/10_BrowsingPois_1_PresentingDetails/assets/
-    - samples/10_BrowsingPois_1_PresentingDetails/jquery/
-    - samples/10_BrowsingPois_1_PresentingDetails/jquery/images/
     - samples/09_ObtainPoiData_3_FromWebservice/
     - samples/09_ObtainPoiData_3_FromWebservice/js/
+    - samples/09_ObtainPoiData_3_FromWebservice/css/
     - samples/09_ObtainPoiData_3_FromWebservice/assets/
-    - samples/09_ObtainPoiData_3_FromWebservice/jquery/
-    - samples/09_ObtainPoiData_3_FromWebservice/jquery/images/
     - samples/09_ObtainPoiData_2_FromLocalResource/
     - samples/09_ObtainPoiData_2_FromLocalResource/js/
+    - samples/09_ObtainPoiData_2_FromLocalResource/css/
     - samples/09_ObtainPoiData_2_FromLocalResource/assets/
-    - samples/09_ObtainPoiData_2_FromLocalResource/jquery/
-    - samples/09_ObtainPoiData_2_FromLocalResource/jquery/images/
     - samples/09_ObtainPoiData_1_FromApplicationModel/
     - samples/09_ObtainPoiData_1_FromApplicationModel/js/
+    - samples/09_ObtainPoiData_1_FromApplicationModel/css/
     - samples/09_ObtainPoiData_1_FromApplicationModel/assets/
-    - samples/09_ObtainPoiData_1_FromApplicationModel/jquery/
-    - samples/09_ObtainPoiData_1_FromApplicationModel/jquery/images/
     - samples/08_PointOfInterest_4_SelectingPois/
     - samples/08_PointOfInterest_4_SelectingPois/js/
+    - samples/08_PointOfInterest_4_SelectingPois/css/
     - samples/08_PointOfInterest_4_SelectingPois/assets/
-    - samples/08_PointOfInterest_4_SelectingPois/jquery/
-    - samples/08_PointOfInterest_4_SelectingPois/jquery/images/
     - samples/08_PointOfInterest_3_MultiplePois/
     - samples/08_PointOfInterest_3_MultiplePois/js/
+    - samples/08_PointOfInterest_3_MultiplePois/css/
     - samples/08_PointOfInterest_3_MultiplePois/assets/
-    - samples/08_PointOfInterest_3_MultiplePois/jquery/
-    - samples/08_PointOfInterest_3_MultiplePois/jquery/images/
     - samples/08_PointOfInterest_2_PoiWithLabel/
     - samples/08_PointOfInterest_2_PoiWithLabel/js/
+    - samples/08_PointOfInterest_2_PoiWithLabel/css/
     - samples/08_PointOfInterest_2_PoiWithLabel/assets/
-    - samples/08_PointOfInterest_2_PoiWithLabel/jquery/
-    - samples/08_PointOfInterest_2_PoiWithLabel/jquery/images/
     - samples/08_PointOfInterest_1_PoiAtLocation/
     - samples/08_PointOfInterest_1_PoiAtLocation/js/
+    - samples/08_PointOfInterest_1_PoiAtLocation/css/
     - samples/08_PointOfInterest_1_PoiAtLocation/assets/
-    - samples/08_PointOfInterest_1_PoiAtLocation/jquery/
-    - samples/08_PointOfInterest_1_PoiAtLocation/jquery/images/
     - samples/07_3dModels_6_3dModelAtGeoLocation/
     - samples/07_3dModels_6_3dModelAtGeoLocation/js/
     - samples/07_3dModels_6_3dModelAtGeoLocation/css/
@@ -192,47 +169,35 @@ flutter:
     - samples/05_InstantTracking_6_LoadInstantTarget/assets/
     - samples/05_InstantTracking_6_LoadInstantTarget/assets/models/
     - samples/05_InstantTracking_6_LoadInstantTarget/assets/buttons/
-    - samples/05_InstantTracking_6_LoadInstantTarget/jquery/
-    - samples/05_InstantTracking_6_LoadInstantTarget/jquery/images/
     - samples/05_InstantTracking_5_SaveInstantTarget/
     - samples/05_InstantTracking_5_SaveInstantTarget/js/
     - samples/05_InstantTracking_5_SaveInstantTarget/css/
     - samples/05_InstantTracking_5_SaveInstantTarget/assets/
     - samples/05_InstantTracking_5_SaveInstantTarget/assets/models/
     - samples/05_InstantTracking_5_SaveInstantTarget/assets/buttons/
-    - samples/05_InstantTracking_5_SaveInstantTarget/jquery/
-    - samples/05_InstantTracking_5_SaveInstantTarget/jquery/images/
     - samples/05_InstantTracking_4_SceneInteraction/
     - samples/05_InstantTracking_4_SceneInteraction/js/
     - samples/05_InstantTracking_4_SceneInteraction/css/
     - samples/05_InstantTracking_4_SceneInteraction/assets/
     - samples/05_InstantTracking_4_SceneInteraction/assets/models/
     - samples/05_InstantTracking_4_SceneInteraction/assets/buttons/
-    - samples/05_InstantTracking_4_SceneInteraction/jquery/
-    - samples/05_InstantTracking_4_SceneInteraction/jquery/images/
     - samples/05_InstantTracking_3_Interactivity/
     - samples/05_InstantTracking_3_Interactivity/js/
     - samples/05_InstantTracking_3_Interactivity/css/
     - samples/05_InstantTracking_3_Interactivity/assets/
     - samples/05_InstantTracking_3_Interactivity/assets/models/
     - samples/05_InstantTracking_3_Interactivity/assets/buttons/
-    - samples/05_InstantTracking_3_Interactivity/jquery/
-    - samples/05_InstantTracking_3_Interactivity/jquery/images/
     - samples/05_InstantTracking_2_3dModelOnPlane/
     - samples/05_InstantTracking_2_3dModelOnPlane/js/
     - samples/05_InstantTracking_2_3dModelOnPlane/css/
     - samples/05_InstantTracking_2_3dModelOnPlane/assets/
     - samples/05_InstantTracking_2_3dModelOnPlane/assets/models/
     - samples/05_InstantTracking_2_3dModelOnPlane/assets/buttons/
-    - samples/05_InstantTracking_2_3dModelOnPlane/jquery/
-    - samples/05_InstantTracking_2_3dModelOnPlane/jquery/images/
     - samples/05_InstantTracking_1_SimpleInstantTracking/
     - samples/05_InstantTracking_1_SimpleInstantTracking/js/
     - samples/05_InstantTracking_1_SimpleInstantTracking/css/
     - samples/05_InstantTracking_1_SimpleInstantTracking/assets/
     - samples/05_InstantTracking_1_SimpleInstantTracking/assets/buttons/
-    - samples/05_InstantTracking_1_SimpleInstantTracking/jquery/
-    - samples/05_InstantTracking_1_SimpleInstantTracking/jquery/images/
     - samples/04_CloudRecognition_3_UsingMetainformationInTheResponse/
     - samples/04_CloudRecognition_3_UsingMetainformationInTheResponse/js/
     - samples/04_CloudRecognition_3_UsingMetainformationInTheResponse/css/
@@ -272,8 +237,6 @@ flutter:
     - samples/02_AdvancedImageTracking_1_Gestures/js/
     - samples/02_AdvancedImageTracking_1_Gestures/css/
     - samples/02_AdvancedImageTracking_1_Gestures/assets/
-    - samples/02_AdvancedImageTracking_1_Gestures/jquery/
-    - samples/02_AdvancedImageTracking_1_Gestures/jquery/images/
     - samples/01_ImageTracking_5_Bonus-Sparkles/
     - samples/01_ImageTracking_5_Bonus-Sparkles/js/
     - samples/01_ImageTracking_5_Bonus-Sparkles/css/

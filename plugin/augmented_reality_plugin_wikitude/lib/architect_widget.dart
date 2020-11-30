@@ -85,6 +85,19 @@ class ArchitectWidget extends StatefulWidget {
       message: captureScreenResponseMap["message"]
     );
   }
+
+  Future<void> showAlert(String title, String message, [bool requestOpenSettings = false]) async {
+    assert(title != null || message != null);
+    if(_architectWidgetState != null) _architectWidgetState.showAlert(title, message, requestOpenSettings);
+  }
+
+  Future<bool> canWebViewGoBack() async {
+    assert(defaultTargetPlatform == TargetPlatform.android, "CanWebViewGoBack() method is not available for $defaultTargetPlatform");
+    if(_architectWidgetState != null && defaultTargetPlatform == TargetPlatform.android) {
+      return await _architectWidgetState.canWebViewGoBack();
+    }
+    return false;
+  }
 }
 
 class _ArchitectWidgetState extends State<ArchitectWidget> {
@@ -212,6 +225,17 @@ class _ArchitectWidgetState extends State<ArchitectWidget> {
     assert(mode != null);
     assert(name != null);
     return await _channel.invokeMethod('captureScreen', {"mode": mode, "name": name});
+  }
+
+  Future<String> showAlert(String title, String message, [bool requestOpenSettings = false]) async {
+    assert(_channel != null);
+    assert(title != null || message != null);
+    return _channel.invokeMethod('showAlert', {"title": title, "message": message, "requestOpenSettings": requestOpenSettings});
+  }
+
+  Future<bool> canWebViewGoBack() async {
+    assert(_channel != null);
+    return _channel.invokeMethod('canWebViewGoBack');
   }
 
   Future<void> _handleMethod(MethodCall call) async {
