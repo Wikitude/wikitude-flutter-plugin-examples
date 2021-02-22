@@ -59,7 +59,7 @@ Sample projects for Android and iOS demoing the most common use-cases.
 The Wikitude Plugin is under Apache 2.0 license (see below), where the Wikitude SDK library (pre-bundled) itself follows a proprietary license scheme (see [LICENSE.MD](LICENSE.md) for details).
 
 ```
-   Copyright 2018-2019 Wikitude GmbH, https://www.wikitude.com
+   Copyright 2018-2021 Wikitude GmbH, https://www.wikitude.com
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.

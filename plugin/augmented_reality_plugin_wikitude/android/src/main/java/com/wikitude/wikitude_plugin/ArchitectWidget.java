@@ -4,6 +4,8 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,10 +13,12 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -34,8 +38,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -253,7 +257,13 @@ public class ArchitectWidget implements PlatformView, MethodCallHandler, Archite
                     JSONObject jsonObject = new JSONObject(captureScreenOptions);
                     boolean mode = jsonObject.getBoolean("mode");
                     String name = jsonObject.getString("name");
-                    permissionRequest(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE, mode, name);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        captureScreenMode = mode;
+                        captureScreenName = name;
+                        captureScreen();
+                    } else {
+                        permissionRequest(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE, mode, name);
+                    }
                 } catch (Throwable t) {
                     Log.e(TAG, "Malformed JSON");
                 }
@@ -309,28 +319,42 @@ public class ArchitectWidget implements PlatformView, MethodCallHandler, Archite
         architectView.captureScreen(captureMode, new ArchitectView.CaptureScreenCallback() {
             @Override
             public void onScreenCaptured(Bitmap bitmap) {
+                final ContentResolver resolver = context.getContentResolver();
                 try {
-                    String imageName = System.currentTimeMillis() + ".jpg";
-                    if (!captureScreenName.isEmpty()) {
-                        if (captureScreenName.contains(".")) {
-                            imageName = captureScreenName;
-                        } else {
-                            imageName = captureScreenName + ".jpg";
-                        }
+                    String fileName;
+                    if (captureScreenName.isEmpty()) {
+                        fileName = String.valueOf(System.currentTimeMillis());
+                    } else {
+                        String[] fileNameSplit = captureScreenName.split("\\.");
+                        fileName = fileNameSplit[0];
                     }
 
-                    File externalPicturesDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-                    File captureScreenImage = new File(externalPicturesDirectory, imageName);
-                    if (captureScreenImage.exists()) {
-                        captureScreenImage.delete();
+                    ContentValues values = new ContentValues();
+                    values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+                    values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
+
+                    String finalPath = "";
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
+                        values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
+                    } else {
+                        File imageDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                        File file = new File(imageDirectory, fileName + ".jpg");
+                        values.put(MediaStore.MediaColumns.DATA, file.getAbsolutePath());
+                        finalPath = file.getAbsolutePath();
                     }
-                    captureScreenImage.createNewFile();
 
-                    final FileOutputStream out = new FileOutputStream(captureScreenImage);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                    out.close();
+                    Uri uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        finalPath = uri.getPath();
+                    }
 
-                    Response response = new Response(true, captureScreenImage.getAbsolutePath());
+                    try (final OutputStream out = resolver.openOutputStream(uri)) {
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                        out.flush();
+                    }
+
+                    Response response = new Response(true, finalPath);
                     permissionResult.success(gson.toJson(response));
                 } catch (Exception e) {
                     Response response = new Response(false, e.getMessage());
