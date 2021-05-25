@@ -28,7 +28,7 @@ packages:
       path: "plugin/augmented_reality_plugin_wikitude"
       relative: true
     source: path
-    version: "9.7.0"
+    version: "9.8.0"
   boolean_selector:
     dependency: transitive
     description:
