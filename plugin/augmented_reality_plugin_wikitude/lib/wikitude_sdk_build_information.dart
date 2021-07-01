@@ -4,5 +4,5 @@ class WikitudeSDKBuildInformation {
   String buildDate;
   String buildNumber;
 
-  WikitudeSDKBuildInformation({this.buildConfiguration, this.buildDate, this.buildNumber});
+  WikitudeSDKBuildInformation({required this.buildConfiguration, required this.buildDate, required this.buildNumber});
 }

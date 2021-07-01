@@ -13,7 +13,7 @@ The Wikitude plugin to create augmented reality experiences in your apps.
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
 
-  s.vendored_frameworks = 'Frameworks/WikitudeSDK.framework'
+  s.vendored_frameworks = 'Frameworks/WikitudeSDK.xcframework'
 
   s.ios.deployment_target = '12.0'
 end

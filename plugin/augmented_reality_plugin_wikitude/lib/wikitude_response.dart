@@ -3,5 +3,5 @@ class WikitudeResponse {
   bool success;
   String message;
 
-  WikitudeResponse({this.success, this.message});
+  WikitudeResponse({required this.success, required this.message});
 }

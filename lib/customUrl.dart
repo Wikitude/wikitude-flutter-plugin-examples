@@ -18,7 +18,7 @@ class _CustomUrlState extends State<CustomUrl> {
 
   final customWorldUrlText = TextEditingController();
 
-  AppBar get appBar {
+  AppBar? get appBar {
     if (!Platform.isIOS) {
       return null;
     }
@@ -46,7 +46,7 @@ class _CustomUrlState extends State<CustomUrl> {
             ),
             ButtonTheme(
               minWidth: double.infinity,
-              child: OutlineButton(
+              child: OutlinedButton(
                 onPressed: () async {
                   if(customWorldUrlText.text.isEmpty) {
                     _showDialog("Error with URL", "Cannot load an empty url", context);
@@ -61,7 +61,7 @@ class _CustomUrlState extends State<CustomUrl> {
                   StartupConfiguration customUrlStartupConfiguration = new StartupConfiguration();
                   customUrlStartupConfiguration.cameraPosition = CameraPosition.BACK;
 
-                  List<String> customUrlRequiredFeatures = new List();
+                  List<String> customUrlRequiredFeatures = [];
                   customUrlRequiredFeatures.add("image_tracking");
                   customUrlRequiredFeatures.add("geo");
 
@@ -72,11 +72,7 @@ class _CustomUrlState extends State<CustomUrl> {
                     return;
                   }
 
-                  Sample sample = new Sample();
-                  sample.name = "Custom URL";
-                  sample.path = customWorldUrlText.text;
-                  sample.requiredFeatures = customUrlRequiredFeatures;
-                  sample.startupConfiguration = customUrlStartupConfiguration;
+                  Sample sample = new Sample(requiredExtensions: [], name: "Custom URL", path: customWorldUrlText.text, requiredFeatures: customUrlRequiredFeatures, startupConfiguration: customUrlStartupConfiguration);
 
                   _pushArView(sample, context);
                 },
@@ -117,7 +113,7 @@ class _CustomUrlState extends State<CustomUrl> {
           title: Text(title),
           content: Text(message),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text("Ok"),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -137,13 +133,13 @@ class _CustomUrlState extends State<CustomUrl> {
           title: Text("Permissions required"),
           content: Text(message),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
-            FlatButton(
+            TextButton(
               child: const Text('Open settings'),
               onPressed: () {
                 Navigator.of(context).pop();

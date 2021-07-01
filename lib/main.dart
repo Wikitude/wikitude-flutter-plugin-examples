@@ -19,10 +19,10 @@ Future<String> _loadSamplesJson() async{
   return await rootBundle.loadString('samples/samples.json');
 }
 
-Future _loadSamples() async{
+Future<List<Category>> _loadSamples() async{
   String samplesJson =  await _loadSamplesJson();
   List<dynamic> categoriesFromJson = json.decode(samplesJson);
-  List<Category> categories = new List();
+  List<Category> categories = [];
 
   for(int i = 0; i < categoriesFromJson.length; i++) {
     categories.add(new Category.fromJson(categoriesFromJson[i]));
@@ -81,12 +81,12 @@ class MyAppState extends State<MainMenu> {
           padding: EdgeInsets.only(left: 10.0, right: 10.0),
           child: FutureBuilder(
             future: _loadSamples(),
-            builder: (context, snapshot) {
+            builder: (context, AsyncSnapshot<List<Category>>snapshot) {
               if(snapshot.hasData) {
                 return Container(
                   decoration: BoxDecoration(color: Colors.white),
                   child: CategoryExpansionTile(
-                    categories: snapshot.data,
+                    categories: snapshot.data!,
                   ),
                 );
               } else {
@@ -116,7 +116,7 @@ class MyAppState extends State<MainMenu> {
   Future<void> _getSDKInfo() async {
     String sdkVersion = await WikitudePlugin.getSDKVersion();
     WikitudeSDKBuildInformation sdkBuildInformation = await WikitudePlugin.getSDKBuildInformation();
-    String flutterVersion = "1.22.3";
+    String flutterVersion = "2.2.0";
 
     String message = "Build configuration: ${sdkBuildInformation.buildConfiguration}\nBuild date: ${sdkBuildInformation.buildDate}\nBuild number: ${sdkBuildInformation.buildNumber}\nBuild version: $sdkVersion\nFlutter version: $flutterVersion";
     showDialog(
@@ -126,7 +126,7 @@ class MyAppState extends State<MainMenu> {
           title: Text("SDK information"),
           content: Text(message),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text("Ok"),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -142,8 +142,8 @@ class MyAppState extends State<MainMenu> {
 class CategoryExpansionTile extends StatefulWidget {
   final List<Category> categories;
   CategoryExpansionTile({
-    Key key,
-    this.categories,
+    Key? key,
+    required this.categories,
   }) : super(key: key);
 
   @override
@@ -175,24 +175,24 @@ class CategoryExpansionTileState extends State<CategoryExpansionTile> {
   }
 
   List<Widget> createSamplesTileList(List<Sample> samples) {
-    List<Widget> tileList = new List();
+    List<Widget> tileList = [];
 
     for(int i = 0; i < samples.length; i++) {
       Sample sample = samples[i];
-      List<String> features = new List();
+      List<String> features = [];
       for(int j = 0; j < sample.requiredFeatures.length; j++) {
         features.add(sample.requiredFeatures[j]);
       }
       
       tileList.add(FutureBuilder(
         future: _isDeviceSupporting(features),
-        builder: (context, snapshot) {
+        builder: (context, AsyncSnapshot<WikitudeResponse>snapshot) {
           if(snapshot.hasData) {
             return Container(
-              decoration: BoxDecoration(color: snapshot.data.success ? Colors.white : Colors.grey),
+              decoration: BoxDecoration(color: snapshot.data!.success ? Colors.white : Colors.grey),
               child: ListTile(
                 title: Text(sample.name),
-                onTap: () => snapshot.data.success ? _pushArView(sample) : _showDialog("Device missing features", snapshot.data.message),
+                onTap: () => snapshot.data!.success ? _pushArView(sample) : _showDialog("Device missing features", snapshot.data!.message),
               )
             );
           } else {
@@ -233,7 +233,7 @@ class CategoryExpansionTileState extends State<CategoryExpansionTile> {
           title: Text(title),
           content: Text(message),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text("Ok"),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -253,13 +253,13 @@ class CategoryExpansionTileState extends State<CategoryExpansionTile> {
           title: Text("Permissions required"),
           content: Text(message),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
-            FlatButton(
+            TextButton(
               child: const Text('Open settings'),
               onPressed: () {
                 Navigator.of(context).pop();

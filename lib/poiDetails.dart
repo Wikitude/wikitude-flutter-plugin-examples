@@ -8,13 +8,9 @@ class PoiDetailsState extends State<PoiDetailsWidget> {
   String title;
   String description;
 
-  PoiDetailsState(String  id, String title, String description) {
-    this.id = id;
-    this.title = title;
-    this.description = description;
-  }
+  PoiDetailsState({required this.id, required this.title, required this.description});
 
-  AppBar get appBar {
+  AppBar? get appBar {
     if (!Platform.isIOS) {
       return null;
     }
@@ -70,12 +66,12 @@ class PoiDetailsWidget extends StatefulWidget {
   final String description;
 
   PoiDetailsWidget({
-    Key key,
-    @required this.id,
-    @required this.title,
-    @required this.description
+    Key? key,
+    required this.id,
+    required this.title,
+    required this.description
   });
 
   @override
-  PoiDetailsState createState() => new PoiDetailsState(id, title, description);
+  PoiDetailsState createState() => new PoiDetailsState(id: id, title: title, description: description);
 }

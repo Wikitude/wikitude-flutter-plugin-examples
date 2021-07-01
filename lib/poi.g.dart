@@ -8,12 +8,13 @@ part of 'poi.dart';
 
 Poi _$PoiFromJson(Map<String, dynamic> json) {
   return Poi(
-      json['id'] as int,
-      (json['longitude'] as num)?.toDouble(),
-      (json['latitude'] as num)?.toDouble(),
-      json['description'] as String,
-      (json['altitude'] as num)?.toDouble(),
-      json['name'] as String);
+    json['id'] as int,
+    (json['longitude'] as num).toDouble(),
+    (json['latitude'] as num).toDouble(),
+    json['description'] as String,
+    (json['altitude'] as num).toDouble(),
+    json['name'] as String,
+  );
 }
 
 Map<String, dynamic> _$PoiToJson(Poi instance) => <String, dynamic>{
@@ -22,5 +23,5 @@ Map<String, dynamic> _$PoiToJson(Poi instance) => <String, dynamic>{
       'latitude': instance.latitude,
       'description': instance.description,
       'altitude': instance.altitude,
-      'name': instance.name
+      'name': instance.name,
     };

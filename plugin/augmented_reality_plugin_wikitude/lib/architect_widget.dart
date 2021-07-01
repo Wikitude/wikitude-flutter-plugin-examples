@@ -13,72 +13,64 @@ typedef void OnJSONObjectReceived(Map<String, dynamic> jsonObject);
 typedef void OnWorldLoaded();
 typedef void OnWorldLoadFailed(String error);
 
+// ignore: must_be_immutable
 class ArchitectWidget extends StatefulWidget {
 
   final ArchitectWidgetCreatedCallback onArchitectWidgetCreated;
-  OnJSONObjectReceived onJSONObjectReceived;
-  OnWorldLoaded onWorldLoaded;
-  OnWorldLoadFailed onWorldLoadFailed;
-  _ArchitectWidgetState _architectWidgetState;
+  OnJSONObjectReceived? onJSONObjectReceived;
+  OnWorldLoaded? onWorldLoaded;
+  OnWorldLoadFailed? onWorldLoadFailed;
+  _ArchitectWidgetState? _architectWidgetState;
 
   StartupConfiguration startupConfiguration;
   List<String> features;
   String licenseKey;
 
   ArchitectWidget({
-    Key key,
-    @required this.onArchitectWidgetCreated,
-    @required this.licenseKey,
-    @required this.startupConfiguration,
-    @required this.features
+    Key? key,
+    required this.onArchitectWidgetCreated,
+    required this.licenseKey,
+    required this.startupConfiguration,
+    required this.features
   });
 
   @override
   _ArchitectWidgetState createState() => _architectWidgetState = 
     new _ArchitectWidgetState(licenseKey, startupConfiguration, features);
 
-  Future<void> load(String url, OnWorldLoaded worldLoaded, OnWorldLoadFailed worldLoadFailed) async {
-    assert(url != null);
-    assert(worldLoaded != null);
-    assert(worldLoadFailed != null);
-    if(_architectWidgetState != null) {
-      onWorldLoaded = worldLoaded;
-      onWorldLoadFailed = worldLoadFailed;
-      _architectWidgetState.load(url);
-    }
+  Future<void> load(String url, OnWorldLoaded? worldLoaded, OnWorldLoadFailed? worldLoadFailed) async {
+    if (worldLoaded != null) onWorldLoaded = worldLoaded;
+    if (worldLoadFailed != null) onWorldLoadFailed = worldLoadFailed;
+    _architectWidgetState?.load(url);
   }
 
   Future<void> pause() async {
-    if(_architectWidgetState != null) _architectWidgetState.pause();
+    _architectWidgetState?.pause();
   }
 
   Future<void> resume() async {
-    if(_architectWidgetState != null) _architectWidgetState.resume();
+    _architectWidgetState?.resume();
   }
 
   Future<void> destroy() async {
-    if(_architectWidgetState != null) _architectWidgetState.destroy();
+    _architectWidgetState?.destroy();
   }
   
   Future<void> setLocation(double lat, double lon, double alt, double accuracy) async {
-    if(_architectWidgetState != null) _architectWidgetState.setLocation(lat, lon, alt, accuracy);
+    _architectWidgetState?.setLocation(lat, lon, alt, accuracy);
   }
 
   Future<void> callJavascript(String jsCmd) async {
-    assert(jsCmd != null);
-    if(_architectWidgetState != null) _architectWidgetState.callJavascript(jsCmd);
+    _architectWidgetState?.callJavascript(jsCmd);
   }
 
   Future<void> setJSONObjectReceivedCallback(OnJSONObjectReceived jsonObjectReceived) async {
-    assert(jsonObjectReceived != null);
-    if(_architectWidgetState != null) {
-      onJSONObjectReceived = jsonObjectReceived;
-      _architectWidgetState.setJSONObjectReceivedCallback();
-    }
+    onJSONObjectReceived = jsonObjectReceived;
+    _architectWidgetState?.setJSONObjectReceivedCallback();
   }
 
   Future<WikitudeResponse> captureScreen(bool mode, String name) async {
-    String captureScreenResponse = await _architectWidgetState.captureScreen(mode, name);
+    String captureScreenResponse = (await _architectWidgetState?.captureScreen(mode, name))!;
     Map<String, dynamic> captureScreenResponseMap = jsonDecode(captureScreenResponse);
     return new WikitudeResponse(
       success: captureScreenResponseMap["success"],
@@ -87,21 +79,17 @@ class ArchitectWidget extends StatefulWidget {
   }
 
   Future<void> showAlert(String title, String message, [bool requestOpenSettings = false]) async {
-    assert(title != null || message != null);
-    if(_architectWidgetState != null) _architectWidgetState.showAlert(title, message, requestOpenSettings);
+    _architectWidgetState?.showAlert(title, message, requestOpenSettings);
   }
 
-  Future<bool> canWebViewGoBack() async {
+  Future<bool?> canWebViewGoBack() async {
     assert(defaultTargetPlatform == TargetPlatform.android, "CanWebViewGoBack() method is not available for $defaultTargetPlatform");
-    if(_architectWidgetState != null && defaultTargetPlatform == TargetPlatform.android) {
-      return await _architectWidgetState.canWebViewGoBack();
-    }
-    return false;
+    return await _architectWidgetState?.canWebViewGoBack();
   }
 }
 
 class _ArchitectWidgetState extends State<ArchitectWidget> {
-  MethodChannel _channel;
+  MethodChannel? _channel;
   Map<String, dynamic> configuration = new Map();
 
   _ArchitectWidgetState(String licenseKey, StartupConfiguration startConfiguration, List<String> features) {
@@ -113,6 +101,9 @@ class _ArchitectWidgetState extends State<ArchitectWidget> {
         this.configuration["camera_position"] = "front";
         break;
       case CameraPosition.DEFAULT:
+        this.configuration["camera_position"] = "default";
+        break;
+      default:
         this.configuration["camera_position"] = "default";
         break;
     }
@@ -130,6 +121,9 @@ class _ArchitectWidgetState extends State<ArchitectWidget> {
       case CameraResolution.AUTO:
         this.configuration["camera_resolution"] = "auto";
         break;
+      default:
+        this.configuration["camera_resolution"] = "auto";
+        break;
     }
 
     switch(startConfiguration.cameraFocusMode) {
@@ -142,7 +136,9 @@ class _ArchitectWidgetState extends State<ArchitectWidget> {
       case CameraFocusMode.OFF:
         this.configuration["camera_focus_mode"] = "off";
         break;
-      
+      default:
+        this.configuration["camera_focus_mode"] = "continuous";
+        break;
     }
 
     this.configuration["license_key"] = licenseKey;
@@ -172,70 +168,58 @@ class _ArchitectWidgetState extends State<ArchitectWidget> {
 
   Future<void> onPlatformViewCreated(id) async {
     _channel =  new MethodChannel('architectwidget_$id');
-    _channel.setMethodCallHandler(_handleMethod);
-    if (widget.onArchitectWidgetCreated == null) {
-      return;
-    }
+    _channel?.setMethodCallHandler(_handleMethod);
     widget.onArchitectWidgetCreated();
   }
 
   Future<void> load(String url) async {
     assert(_channel != null);
-    assert(url != null);
-    return _channel.invokeMethod('load', url);
+    return _channel?.invokeMethod('load', url);
   }
 
   Future<void> pause() async {
     assert(_channel != null);
-    return _channel.invokeMethod('onPause');
+    return _channel?.invokeMethod('onPause');
   }
 
   Future<void> resume() async {
     assert(_channel != null);
-    return _channel.invokeMethod('onResume');
+    return _channel?.invokeMethod('onResume');
   }
 
   Future<void> destroy() async {
     assert(_channel != null);
-    return _channel.invokeMethod('onDestroy');
+    return _channel?.invokeMethod('onDestroy');
   }
 
   Future<void> setLocation(double lat, double lon, double alt, double accuracy) async {
     assert(_channel != null);
-    assert(lat != null);
-    assert(lon != null);
-    assert(alt != null);
-    assert(accuracy != null);
-    return _channel.invokeMethod('setLocation', {"lat": lat, "lon": lon, "alt": alt, "accuracy": accuracy});
+    return _channel?.invokeMethod('setLocation', {"lat": lat, "lon": lon, "alt": alt, "accuracy": accuracy});
   }
 
   Future<void> callJavascript(String jsCmd) async {
     assert(_channel != null);
-    assert(jsCmd != null);
-    return _channel.invokeMethod('callJavascript', jsCmd);
+    return _channel?.invokeMethod('callJavascript', jsCmd);
   }
 
   Future<void> setJSONObjectReceivedCallback() async {
     assert(_channel != null);
-    return _channel.invokeMethod('addArchitectJavaScriptInterfaceListener');
+    return _channel?.invokeMethod('addArchitectJavaScriptInterfaceListener');
   }
 
   Future<String> captureScreen(bool mode, String name) async {
     assert(_channel != null);
-    assert(mode != null);
-    assert(name != null);
-    return await _channel.invokeMethod('captureScreen', {"mode": mode, "name": name});
+    return await _channel?.invokeMethod('captureScreen', {"mode": mode, "name": name});
   }
 
-  Future<String> showAlert(String title, String message, [bool requestOpenSettings = false]) async {
+  Future<String?> showAlert(String title, String message, [bool requestOpenSettings = false]) async {
     assert(_channel != null);
-    assert(title != null || message != null);
-    return _channel.invokeMethod('showAlert', {"title": title, "message": message, "requestOpenSettings": requestOpenSettings});
+    return _channel?.invokeMethod('showAlert', {"title": title, "message": message, "requestOpenSettings": requestOpenSettings});
   }
 
-  Future<bool> canWebViewGoBack() async {
+  Future<bool?> canWebViewGoBack() async {
     assert(_channel != null);
-    return _channel.invokeMethod('canWebViewGoBack');
+    return _channel?.invokeMethod('canWebViewGoBack');
   }
 
   Future<void> _handleMethod(MethodCall call) async {
@@ -244,19 +228,19 @@ class _ArchitectWidgetState extends State<ArchitectWidget> {
         if (widget.onJSONObjectReceived == null) {
           return;
         }
-        widget.onJSONObjectReceived(jsonDecode(call.arguments));
+        widget.onJSONObjectReceived!(jsonDecode(call.arguments));
         break;
       case "onWorldLoaded":
         if (widget.onWorldLoaded == null) {
           return;
         }
-        widget.onWorldLoaded();
+        widget.onWorldLoaded!();
         break;
       case "onWorldLoadFailed":
         if (widget.onWorldLoadFailed == null) {
           return;
         }
-        widget.onWorldLoadFailed(call.arguments);
+        widget.onWorldLoadFailed!(call.arguments);
         break;
     }
   }

@@ -20,13 +20,13 @@ const Duration _expandDuration = Duration(milliseconds: 200);
 class CustomExpansionTile extends StatefulWidget {
 
   const CustomExpansionTile({
-    Key key,
+    required Key key,
     this.expandDuration,
     this.headerBackgroundColor,
     this.headerBackgroundColorAccent,
     this.headerContentPadding,
     this.leading,
-    @required this.title,
+    required this.title,
     this.backgroundColor,
     this.borderColor,
     this.borderHeight,
@@ -38,20 +38,20 @@ class CustomExpansionTile extends StatefulWidget {
   })  : assert(initiallyExpanded != null),
         super(key: key);
 
-  final Duration expandDuration;
-  final Color headerBackgroundColor;
-  final Color headerBackgroundColorAccent;
-  final EdgeInsets headerContentPadding;
-  final Widget leading;
+  final Duration? expandDuration;
+  final Color? headerBackgroundColor;
+  final Color? headerBackgroundColorAccent;
+  final EdgeInsets? headerContentPadding;
+  final Widget? leading;
   final Widget title;
-  final Color backgroundColor;
-  final Color borderColor;
-  final double borderHeight;
-  final Color iconColor;
-  final ValueChanged<bool> onExpansionChanged;
+  final Color? backgroundColor;
+  final Color? borderColor;
+  final double? borderHeight;
+  final Color? iconColor;
+  final ValueChanged<bool>? onExpansionChanged;
   final List<Widget> children;
-  final Widget trailing;
-  final bool initiallyExpanded;
+  final Widget? trailing;
+  final bool? initiallyExpanded;
 
   @override
   CustomExpansionTileState createState() => CustomExpansionTileState();
@@ -65,10 +65,10 @@ class CustomExpansionTileState extends State<CustomExpansionTile> with SingleTic
 
   final ColorTween _headerBackgroundColorTween = ColorTween();
 
-  AnimationController _controller;
-  Animation<double> _iconTurns;
-  Animation<double> _heightFactor;
-  Animation<Color> _headerBackgroundColor;
+  late AnimationController _controller;
+  late Animation<double> _iconTurns;
+  late Animation<double> _heightFactor;
+  late Animation<Color?> _headerBackgroundColor;
 
   bool _isExpanded = false;
 
@@ -101,10 +101,10 @@ class CustomExpansionTileState extends State<CustomExpansionTile> with SingleTic
       PageStorage.of(context)?.writeState(context, _isExpanded);
     });
     if (widget.onExpansionChanged != null)
-      widget.onExpansionChanged(_isExpanded);
+      widget.onExpansionChanged!(_isExpanded);
   }
 
-  Widget _buildChildren(BuildContext context, Widget child) {
+  Widget _buildChildren(BuildContext context, Widget? child) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget> [
